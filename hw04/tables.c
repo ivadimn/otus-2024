@@ -136,7 +136,7 @@ void to_utf8(char* infile, char* outfile, encode_t encode) {
     if (buffer == NULL)
         err_sys("Ошибка распределения памяти.");
         
-    while (read(fd_in, buffer, reading_size) == reading_size) {
+    while ((reading_size = read(fd_in, buffer, reading_size)) > 0) {
         for (int i = 0; i < reading_size; i++) {
             code = buffer[i]; 
             if(code < 128)
