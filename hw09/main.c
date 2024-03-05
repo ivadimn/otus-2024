@@ -1,6 +1,6 @@
 /*
   Все имена функций как в ассемблерном коде
-  Для реализации спискков предложена структура list_node_t
+  Для реализации списков предложена структура list_node_t
   Добавлена функция освобождения памяти node_free.
 */
 
@@ -21,11 +21,20 @@ typedef struct list_node_t {
 } list_node_t;
 
 void node_free(list_node_t* node) {
+    list_node_t* lnode = node; 
+    while(node) {
+        lnode = node->next;    
+        free(node);
+        node = lnode;
+    }    
+}
+
+/*void node_free(list_node_t* node) {
     if (node) {
         node_free(node->next);
         free(node);
     }    
-}
+}*/
 
 list_node_t* add_element(list_node_t* head, long value) {
 
