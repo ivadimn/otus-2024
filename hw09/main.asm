@@ -1,5 +1,5 @@
 bits 64
-extern malloc, puts, printf, fflush, abort
+extern malloc, puts, printf, fflush, abort, free
 global main
 
 
@@ -15,6 +15,7 @@ section .text
 ;;; print_int proc
 print_int:
     push rbp
+      
     push rax
     push rdi
     push rsi
@@ -130,6 +131,32 @@ outf:
     pop rbx
     ret
 
+;;; mem_free
+mem_free:
+    push rbp
+    mov rbp, rsp
+       
+    push rax
+    push rdi
+    push rbx
+    push rsi
+    
+.next_iter:
+    test rdi, rdi   
+    jz .outmf1
+    mov rbx, [rdi + 8]
+    call free
+    mov rdi, rbx
+    jmp .next_iter        
+.outmf1:
+    pop rsi
+    pop rbx
+    pop rdi
+    pop rax
+    pop rbp
+    ret              
+        
+
 main:
     mov rbp, rsp; for correct debugging
     push rbx
@@ -143,10 +170,12 @@ adding_loop:
     dec rbx
     jnz adding_loop
         
+    mov r14, rax
     mov rbx, rax
     mov rdi, rax
     call m
-
+    
+    
     mov rdi, empty_str
     call puts
 
@@ -158,8 +187,15 @@ adding_loop:
     mov rbx, rsi
     call m
 
+
     mov rdi, empty_str
     call puts
+                                              
+    mov rdi, r14
+    call mem_free
+    
+    mov rdi, rbx
+    call mem_free
 
     pop rbx
 
