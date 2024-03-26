@@ -1,0 +1,1 @@
+gcc -Wall -Wextra -Wpedantic -std=c11 main.c crc32.c common.c -o crc32
