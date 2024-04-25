@@ -27,7 +27,7 @@ int handle_query(int client_socket, char* query, const char* filename) {
         query[len-1] = '\0';
 
     if(strcmp(query, commands[1]) == 0)
-        return 0;
+        return 1;
     if (strcmp(query, commands[0]) != 0)     {
         strcpy(ans, "Команда не поддерживается,\nподдерживаемые команды: size, exit.\n");
         send(client_socket, ans, strlen(ans), 0);
@@ -89,14 +89,14 @@ int run_server(const char* cmd, const char* filename) {
                     log_ret("Закрытие соединения.");
                 else {
                     rc = handle_query(client_sock, buf, filename);
-                    if (rc == 0)
+                    if (rc >= 0)
                         break;
             }    
             } while (rval > 0);
         }
 
         close(client_sock);
-        if (rc == 0)
+        if (rc == 1)
             break;
         
     }
